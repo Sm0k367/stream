@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const audio = new Audio('media/ai_lounge_after_dark.mp3');
+    const audio = new Audio('media/240.mp3');
     const playPauseButton = document.getElementById('play-pause');
     const progressBar = document.getElementById('progress-bar');
     const volumeControl = document.getElementById('volume-control');
