@@ -3,26 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Showcase</title>
+    <title>AI Hub</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
-        <img src="assets/design_1500x500_c7741489.png" alt="AI Showcase Logo" class="logo">
-        <h1>Welcome to the AI Showcase</h1>
+        <img src="assets/logo.png" alt="AI Hub Logo" class="logo">
+        <h1>Welcome to AI Hub</h1>
+        <nav>
+            <ul>
+                <li><a href="#demos">Demos</a></li>
+                <li><a href="#resources">Resources</a></li>
+                <li><a href="#community">Community</a></li>
+                <li><a href="#tools">Tools</a></li>
+            </ul>
+        </nav>
     </header>
     <main>
-        <section class="introduction">
-            <h2>Introduction</h2>
-            <p>Explore the capabilities of AI through various examples and interactive elements.</p>
+        <section id="demos">
+            <h2>Interactive AI Demos</h2>
+            <div class="demo">
+                <h3>Text Generation</h3>
+                <button onclick="showTextGenerationDemo()">Try It</button>
+            </div>
+            <div class="demo">
+                <h3>Image Generation</h3>
+                <button onclick="showImageGenerationDemo()">Try It</button>
+            </div>
+            <div class="demo">
+                <h3>Voice Synthesis</h3>
+                <button onclick="showVoiceSynthesisDemo()">Try It</button>
+            </div>
+            <div class="demo">
+                <h3>Chatbots</h3>
+                <button onclick="showChatbotDemo()">Try It</button>
+            </div>
         </section>
-        <section class="example">
-            <h2>Example Image</h2>
-            <img src="assets/mindseye1.jpeg.jpg" alt="Example Image" class="example-image">
+        <section id="resources">
+            <h2>AI Learning Resources</h2>
+            <ul>
+                <li><a href="docs/tutorials.html">Tutorials</a></li>
+                <li><a href="docs/articles.html">Articles</a></li>
+                <li><a href="docs/videos.html">Videos</a></li>
+            </ul>
+        </section>
+        <section id="community">
+            <h2>Community Engagement</h2>
+            <ul>
+                <li><a href="community/forums.html">Forums</a></li>
+                <li><a href="community/events.html">Events</a></li>
+                <li><a href="community/projects.html">Projects</a></li>
+            </ul>
+        </section>
+        <section id="tools">
+            <h2>AI Tools and APIs</h2>
+            <p>Access various AI APIs and toolkits for hands-on experience.</p>
         </section>
     </main>
     <footer>
-        <p>&copy; 2025 AI Showcase. All rights reserved.</p>
+        <p>&copy; 2025 AI Hub. All rights reserved.</p>
     </footer>
     <script src="js/main.js"></script>
 </body>
