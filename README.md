@@ -1,11 +1,11 @@
-# AI Showcase
+# AI Hub
 
-Welcome to the AI Showcase repository! This project is designed to demonstrate the capabilities of AI through various examples and interactive elements.
+Welcome to the AI Hub repository! This project is designed to demonstrate the capabilities of AI through various examples and interactive elements.
 
 ## Project Structure
 
 
-ai_showcase/ ├── index.html ├── css/ │ └── style.css ├── js/ │ └── main.js ├── assets/ │ ├── logo.png │ └── example_image.png └── README.md
+ai_hub/ ├── index.html ├── css/ │ └── style.css ├── js/ │ └── main.js ├── assets/ │ ├── design_1500x500_c7741489.png │ └── mindseye1.jpeg.jpg ├── README.md
 
 ## Getting Started
 
@@ -59,4 +59,4 @@ For any questions or feedback, please contact [Your Name] at [your.email@example
 
 ---
 
-**Built with ❤️ by AI Showcase Team**
+**Built with ❤️ by AI Hub Team**
