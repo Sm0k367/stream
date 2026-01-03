@@ -1,13 +1,9 @@
-/* --- GOOGLE FONTS IMPORT --- */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;600&family=Space+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono&display=swap');
 
 :root {
   --neon-cyan: #00f3ff;
-  --neon-magenta: #ff00ff;
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --safe-top: env(safe-area-inset-top);
-  --safe-bottom: env(safe-area-inset-bottom);
+  --glass: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.1);
 }
 
 * {
@@ -16,61 +12,52 @@
   box-sizing: border-box;
 }
 
-body, html {
-  width: 100%;
-  height: 100%;
-  background-color: #050505;
-  color: white;
-  font-family: 'Poppins', sans-serif;
-  overflow: hidden; /* Prevents scrolling on mobile */
-  overscroll-behavior: none;
+body {
+  background: #000;
+  color: #fff;
+  font-family: 'Space Mono', monospace;
+  overflow: hidden;
+  height: 100vh;
 }
 
-/* --- THE 3D CANVAS --- */
+/* 3D Canvas Background */
 #experience-canvas {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1;
+  z-index: 0;
 }
 
-/* --- LOADER / START OVERLAY --- */
+/* Entry Overlay */
 #loader-overlay {
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: radial-gradient(circle at center, #111 0%, #000 100%);
+  background: #000;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-align: center;
-  padding: 20px;
+  transition: opacity 1s ease;
 }
 
 .glitch-text {
   font-family: 'Orbitron', sans-serif;
-  font-size: clamp(2rem, 8vw, 4.5rem);
-  text-transform: uppercase;
-  letter-spacing: 10px;
-  margin-bottom: 2rem;
+  font-size: clamp(2.5rem, 10vw, 5rem);
   color: var(--neon-cyan);
+  letter-spacing: 10px;
+  margin-bottom: 20px;
   text-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
 }
 
 #start-btn {
-  padding: 15px 40px;
-  font-family: 'Space Mono', monospace;
   background: transparent;
   border: 1px solid var(--neon-cyan);
   color: var(--neon-cyan);
+  padding: 15px 40px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 1rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  font-family: 'Orbitron';
+  transition: 0.3s;
 }
 
 #start-btn:hover {
@@ -79,99 +66,47 @@ body, html {
   box-shadow: 0 0 30px var(--neon-cyan);
 }
 
-/* --- UI CONTROLS --- */
+/* Player UI */
 .ui-container {
   position: relative;
   z-index: 10;
   height: 100vh;
-  width: 100vw;
-  pointer-events: none; /* Allows clicking through to the 3D scene */
-  padding: calc(var(--safe-top) + 20px) 20px calc(var(--safe-bottom) + 40px) 20px;
+  padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom) 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
-
-.top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.status-badge {
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-  padding: 8px 16px;
-  border-radius: 50px;
-  font-size: 0.7rem;
-  font-family: 'Space Mono', monospace;
-  color: var(--neon-cyan);
+  pointer-events: none;
 }
 
 .controls-wrapper {
-  pointer-events: auto; /* Re-enable clicking for buttons */
-  max-width: 500px;
-  width: 100%;
-  margin: 0 auto;
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
-  border-radius: 24px;
+  pointer-events: auto;
+  background: var(--glass);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--border);
+  border-radius: 20px;
   padding: 25px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  max-width: 450px;
+  margin: 0 auto 40px auto;
+  width: 100%;
 }
 
-.track-info h2 {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1.2rem;
-  margin-bottom: 5px;
-}
-
-.track-info p {
-  font-size: 0.8rem;
-  opacity: 0.6;
-  margin-bottom: 20px;
-}
-
-/* --- PROGRESS BAR --- */
 .progress-container {
   width: 100%;
   height: 4px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255,255,255,0.1);
+  margin: 15px 0;
   border-radius: 2px;
-  margin-bottom: 10px;
-  overflow: hidden;
 }
 
 .progress-fill {
   width: 0%;
   height: 100%;
-  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
-  transition: width 0.1s linear;
+  background: var(--neon-cyan);
 }
 
 .time-display {
   display: flex;
   justify-content: space-between;
-  font-family: 'Space Mono', monospace;
   font-size: 0.7rem;
-  opacity: 0.5;
-}
-
-/* --- RESPONSIVE TWEAKS --- */
-@media (max-width: 768px) {
-  .controls-wrapper {
-    width: 90vw;
-    padding: 20px;
-  }
-  
-  .glitch-text {
-    letter-spacing: 4px;
-  }
-}
-
-/* Utility: Hide on start */
-.hidden {
-  display: none !important;
+  opacity: 0.6;
 }
