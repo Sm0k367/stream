@@ -1,4 +1,3 @@
-// app/page.tsx
 "use client"
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -12,31 +11,29 @@ export default function SunoNebulaPage() {
 
   const handleStart = () => {
     setHasStarted(true);
-    // The Audio context is resumed via the HUD's useEffect click listener
-    // but we trigger the initial play here for a seamless "Enter" experience
-    setTimeout(() => play(), 100); 
+    // Short delay to ensure audio context is ready after user interaction
+    setTimeout(() => play(), 200); 
   };
 
   return (
-    <main className="relative h-screen w-full overflow-hidden bg-black selection:bg-purple-500/30">
-      {/* 1. The 3D Background Layer */}
+    <main className="relative h-screen w-full overflow-hidden bg-black">
+      {/* 1. The 3D Reactive Layer */}
       <NebulaScene />
 
-      {/* 2. Interactive HUD Layer */}
+      {/* 2. Main UI Layer */}
       <AnimatePresence>
         {hasStarted && (
           <>
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="absolute top-12 left-12 z-20"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="absolute top-10 left-10 z-20"
             >
-              <h1 className="text-4xl font-black tracking-tighter text-white/90">
+              <h1 className="text-3xl font-black tracking-tighter text-white uppercase italic">
                 SMOKE <span className="text-purple-500">STREAM</span>
               </h1>
-              <p className="text-xs tracking-[0.3em] text-white/40 uppercase">
-                Generative Audio Experience v1.0
-              </p>
+              <div className="h-[1px] w-12 bg-purple-500 mt-1" />
             </motion.div>
 
             <PlayerHUD />
@@ -44,43 +41,39 @@ export default function SunoNebulaPage() {
         )}
       </AnimatePresence>
 
-      {/* 3. The Cinematic Entry Overlay */}
+      {/* 3. The "Never Seen Before" Entry Portal */}
       <AnimatePresence>
         {!hasStarted && (
           <motion.div
-            exit={{ opacity: 0, scale: 1.1 }}
-            className="absolute inset-0 z-[100] flex items-center justify-center bg-black"
+            exit={{ opacity: 0, scale: 1.2, filter: "blur(20px)" }}
+            transition={{ duration: 1 }}
+            className="absolute inset-0 z-[100] flex flex-col items-center justify-center bg-black"
           >
-            <div className="text-center">
-              <motion.div
-                animate={{ 
-                  opacity: [0.4, 1, 0.4],
-                  scale: [0.98, 1, 0.98] 
-                }}
-                transition={{ duration: 3, repeat: Infinity }}
-                className="mb-8"
-              >
-                <h2 className="text-6xl font-thin text-white tracking-[0.5em] uppercase">
-                  Suno Nebula
-                </h2>
-              </motion.div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center space-y-8"
+            >
+              <h2 className="text-5xl md:text-7xl font-thin text-white tracking-[0.4em] uppercase">
+                NEBULA
+              </h2>
               
               <button
                 onClick={handleStart}
-                className="group relative px-12 py-4 text-white overflow-hidden rounded-full border border-white/20 transition-all hover:border-purple-500"
+                className="group relative px-10 py-4 border border-white/10 rounded-full overflow-hidden transition-all hover:border-purple-500"
               >
-                <div className="absolute inset-0 bg-white/5 group-hover:bg-purple-500/20 transition-colors" />
-                <span className="relative z-10 tracking-[0.2em] font-light">
-                  INITIALIZE STREAM
+                <div className="absolute inset-0 bg-white/5 group-hover:bg-purple-500/10 transition-colors" />
+                <span className="relative z-10 text-white tracking-[0.3em] text-xs font-light">
+                  ENTER THE STREAM
                 </span>
               </button>
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* 4. Ambient "Smoke" Noise Overlay */}
-      <div className="pointer-events-none absolute inset-0 z-10 opacity-[0.03] mix-blend-screen bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+      {/* 4. Film Grain Aesthetic Overlay */}
+      <div className="pointer-events-none absolute inset-0 z-10 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
     </main>
   );
 }
