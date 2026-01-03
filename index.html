@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DJ SMOKE STREAM | AI Lounge After Dark</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <canvas id="experience-canvas"></canvas>
+
+    <main id="app-interface">
+        <header class="top-bar">
+            <div class="status">
+                <span class="pulse"></span> LIVE: AI LOUNGE // AFTER DARK
+            </div>
+            <div class="brand">DJ SMOKE STREAM</div>
+        </header>
+
+        <section class="player-core">
+            <div class="track-info">
+                <h1 class="glitch-text" data-text="AFTER DARK">AFTER DARK</h1>
+                <p class="artist-name">Synthesized by AI Lounge</p>
+            </div>
+
+            <div class="visualizer-container">
+                <canvas id="waveform-overlay"></canvas>
+            </div>
+
+            <div class="controls-wrapper">
+                <div class="progress-area">
+                    <div class="time-current">0:00</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div class="time-total">2:58</div>
+                </div>
+
+                <div class="main-buttons">
+                    <button id="btn-shuffle" title="Shuffle"><i class="icon-shuffle"></i></button>
+                    <button id="btn-play" class="play-trigger">
+                        <div class="play-icon"></div>
+                    </button>
+                    <button id="btn-repeat" title="Repeat"><i class="icon-repeat"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bottom-stats">
+            <div class="stat-box">
+                <span class="label">GENRE</span>
+                <span class="value">VAPORHOUSE</span>
+            </div>
+            <div class="stat-box">
+                <span class="label">BPM</span>
+                <span class="value">94.0</span>
+            </div>
+        </footer>
+    </main>
+
+    <div id="loader-overlay">
+        <div class="loader-content">
+            <h2 class="orbitron">INITIALIZING SYSTEM...</h2>
+            <button id="start-btn">ENTER LOUNGE</button>
+        </div>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
