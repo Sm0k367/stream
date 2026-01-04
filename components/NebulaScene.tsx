@@ -1,54 +1,28 @@
-"use client"
-import React, { useRef, useMemo } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { Points, PointMaterial, Float } from '@react-three/drei'
-import * as THREE from 'three'
-import { useAudioPlayer } from '@/hooks/useAudioPlayer'
+// Update the SmokeParticles component inside NebulaScene.tsx
+import { useAudioAnalyzer } from '@/hooks/useAudioAnalyzer';
 
 function SmokeParticles() {
-  const ref = useRef<THREE.Points>(null!)
-  const { isPlaying } = useAudioPlayer()
+  const ref = useRef<THREE.Points>(null!);
+  const { isPlaying } = useAudioPlayer();
+  const { getFrequencyData } = useAudioAnalyzer();
   
-  const sphere = useMemo(() => {
-    const arr = new Float32Array(2000 * 3)
-    for (let i = 0; i < 2000; i++) {
-      const stride = i * 3
-      arr[stride] = (Math.random() - 0.5) * 15
-      arr[stride + 1] = (Math.random() - 0.5) * 15
-      arr[stride + 2] = (Math.random() - 0.5) * 15
-    }
-    return arr
-  }, [])
+  // ... (keep the existing useMemo code for sphere)
 
   useFrame((state, delta) => {
-    const speed = isPlaying ? 0.15 : 0.02
-    ref.current.rotation.x += delta * speed
-    ref.current.rotation.y += delta * (speed / 1.5)
-  })
+    const volume = getFrequencyData(); // Get current audio intensity (0-255)
+    const boost = volume / 100; // Normalize it
+    
+    // Rotation speeds up based on the music intensity
+    const speed = isPlaying ? (0.15 + boost) : 0.02;
+    ref.current.rotation.x += delta * speed;
+    ref.current.rotation.y += delta * (speed / 1.5);
+
+    // Scale the entire universe based on the bass!
+    const targetScale = isPlaying ? (1 + boost * 0.5) : 1;
+    ref.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
+  });
 
   return (
-    <group rotation={[0, 0, Math.PI / 4]}>
-      <Points ref={ref} positions={sphere} stride={3} frustumCulled={false}>
-        <PointMaterial
-          transparent
-          color="#a855f7"
-          size={0.07}
-          sizeAttenuation={true}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-        />
-      </Points>
-    </group>
-  )
-}
-
-export const NebulaScene = () => {
-  return (
-    <div className="fixed inset-0 -z-10 bg-black">
-      <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
-        <fog attach="fog" args={['#000', 5, 20]} />
-        <SmokeParticles />
-      </Canvas>
-    </div>
-  )
+    // ... same as before
+  );
 }
