@@ -1,56 +1,60 @@
 "use client"
 import React, { useRef, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Points, PointMaterial } from '@react-three/drei'
+import { Points, PointMaterial, Float } from '@react-three/drei'
 import * as THREE from 'three'
+import { useAudioAnalyzer } from '../hooks/useAudioAnalyzer'
 
-// FIXED IMPORT
-import { useAudioPlayer } from '../hooks/useAudioPlayer'
-
-function SmokeParticles() {
-  const ref = useRef<THREE.Points>(null!)
-  const { isPlaying } = useAudioPlayer()
+function KineticParticles() {
+  const pointsRef = useRef<THREE.Points>(null!)
+  const { getFrequencyData } = useAudioAnalyzer()
   
-  const sphere = useMemo(() => {
-    const arr = new Float32Array(2000 * 3)
-    for (let i = 0; i < 2000; i++) {
-      const stride = i * 3
-      arr[stride] = (Math.random() - 0.5) * 15
-      arr[stride + 1] = (Math.random() - 0.5) * 15
-      arr[stride + 2] = (Math.random() - 0.5) * 15
+  const count = 5000;
+  const positions = useMemo(() => {
+    const pos = new Float32Array(count * 3)
+    for (let i = 0; i < count; i++) {
+      pos[i * 3] = (Math.random() - 0.5) * 20
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 20
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 20
     }
-    return arr
+    return pos
   }, [])
 
-  useFrame((state, delta) => {
-    const speed = isPlaying ? 0.15 : 0.02
-    ref.current.rotation.x += delta * speed
-    ref.current.rotation.y += delta * (speed / 1.5)
+  useFrame((state) => {
+    const freq = getFrequencyData();
+    const time = state.clock.getElapsedTime();
+    
+    // Pulse particles to the bass
+    const scale = 1 + (freq / 255) * 0.5;
+    pointsRef.current.scale.lerp(new THREE.Vector3(scale, scale, scale), 0.1);
+    
+    // Organic drift
+    pointsRef.current.rotation.y = time * 0.05;
+    pointsRef.current.rotation.x = Math.sin(time * 0.1) * 0.2;
   })
 
   return (
-    <group rotation={[0, 0, Math.PI / 4]}>
-      <Points ref={ref} positions={sphere} stride={3} frustumCulled={false}>
-        <PointMaterial
-          transparent
-          color="#a855f7"
-          size={0.07}
-          sizeAttenuation={true}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-        />
-      </Points>
-    </group>
+    <Points ref={pointsRef} positions={positions} stride={3}>
+      <PointMaterial
+        transparent
+        color="#a855f7"
+        size={0.05}
+        sizeAttenuation={true}
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+      />
+    </Points>
   )
 }
 
-export const NebulaScene = () => {
-  return (
-    <div className="fixed inset-0 -z-10 bg-black">
-      <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
-        <fog attach="fog" args={['#000', 5, 20]} />
-        <SmokeParticles />
-      </Canvas>
-    </div>
-  )
-}
+export const NebulaScene = () => (
+  <div className="fixed inset-0 -z-10 bg-[#020202]">
+    <Canvas camera={{ position: [0, 0, 10], fov: 60 }}>
+      <color attach="background" args={['#000']} />
+      <fog attach="fog" args={['#000', 8, 20]} />
+      <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+        <KineticParticles />
+      </Float>
+    </Canvas>
+  </div>
+);
