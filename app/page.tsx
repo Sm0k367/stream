@@ -1,9 +1,11 @@
 "use client"
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { NebulaScene } from '@/components/NebulaScene';
-import { PlayerHUD } from '@/components/PlayerHUD';
-import { useAudioPlayer } from '@/hooks/useAudioPlayer';
+
+// FIXED IMPORTS
+import { NebulaScene } from '../components/NebulaScene';
+import { PlayerHUD } from '../components/PlayerHUD';
+import { useAudioPlayer } from '../hooks/useAudioPlayer';
 
 export default function SunoNebulaPage() {
   const [hasStarted, setHasStarted] = useState(false);
@@ -11,16 +13,13 @@ export default function SunoNebulaPage() {
 
   const handleStart = () => {
     setHasStarted(true);
-    // Short delay to ensure audio context is ready after user interaction
     setTimeout(() => play(), 200); 
   };
 
   return (
     <main className="relative h-screen w-full overflow-hidden bg-black">
-      {/* 1. The 3D Reactive Layer */}
       <NebulaScene />
 
-      {/* 2. Main UI Layer */}
       <AnimatePresence>
         {hasStarted && (
           <>
@@ -41,7 +40,6 @@ export default function SunoNebulaPage() {
         )}
       </AnimatePresence>
 
-      {/* 3. The "Never Seen Before" Entry Portal */}
       <AnimatePresence>
         {!hasStarted && (
           <motion.div
@@ -72,7 +70,6 @@ export default function SunoNebulaPage() {
         )}
       </AnimatePresence>
 
-      {/* 4. Film Grain Aesthetic Overlay */}
       <div className="pointer-events-none absolute inset-0 z-10 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
     </main>
   );
