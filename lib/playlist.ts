@@ -6,17 +6,17 @@ export interface SunoTrack {
   coverArt: string;
 }
 
+// These are the IDs extracted from your iframes
 const TRACK_IDS: string[] = [
-  "budKYGOsXRPSzUXI", "WQkFJDnUp9mMumqu", "LggT2EZJVY8pCTrV", 
-  "KAToclBpU1nJQv3x", "xUaUScrhSC98gAix", "vEOfE03Y6v5BN12V"
+  "fbacec1b-457a-4a29-9407-5ac4e5232a63",
+  "10242707-d00a-4cae-9470-a88f7625e53f"
 ];
 
 export const SUNO_PLAYLIST: SunoTrack[] = TRACK_IDS.map((id: string, index: number) => ({
   id,
-  title: `Smoke Track ${index + 1}`,
-  shareUrl: `https://suno.com/s/${id}`,
-  // We add a fallback to a sample MP3 if the Suno one fails
+  title: index === 0 ? "Smoke Stream Track 1" : "Smoke Stream Track 2",
+  shareUrl: `https://suno.com/song/${id}`,
+  // Direct CDN links sometimes require a 'v' param or specific headers
   streamUrl: `https://cdn1.suno.ai/${id}.mp3`,
-  // Using a high-quality placeholder that looks like a nebula if Suno art fails
-  coverArt: `https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=200&h=200&fit=crop`
+  coverArt: `https://cdn1.suno.ai/image_${id}.png`
 }));
