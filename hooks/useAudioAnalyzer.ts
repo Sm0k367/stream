@@ -10,13 +10,12 @@ export const useAudioAnalyzer = () => {
   useEffect(() => {
     if (!audio || analyzerRef.current) return;
 
-    // 1. Create the Audio Context
+    // Use the existing audio element from our store
     const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
     const context = new AudioContext();
     
-    // 2. Create the Analyzer
     const analyzer = context.createAnalyser();
-    analyzer.fftSize = 256; // High resolution for the nebula
+    analyzer.fftSize = 256; // Balance between detail and performance
     
     const source = context.createMediaElementSource(audio);
     source.connect(analyzer);
@@ -32,9 +31,10 @@ export const useAudioAnalyzer = () => {
   const getFrequencyData = () => {
     if (analyzerRef.current && dataArrayRef.current) {
       analyzerRef.current.getByteFrequencyData(dataArrayRef.current);
-      return dataArrayRef.current;
+      // Return the average volume/frequency
+      return dataArrayRef.current.reduce((a, b) => a + b) / dataArrayRef.current.length;
     }
-    return null;
+    return 0;
   };
 
   return { getFrequencyData };
