@@ -1,6 +1,5 @@
 "use client"
 import { create } from 'zustand';
-// FIXED IMPORT
 import { SUNO_PLAYLIST, SunoTrack } from '../lib/playlist';
 
 interface AudioState {
@@ -8,7 +7,7 @@ interface AudioState {
   currentTrackIndex: number;
   currentTrack: SunoTrack;
   audio: HTMLAudioElement | null;
-  play: () => void;
+  play: () => Promise<void>;
   pause: () => void;
   next: () => void;
   previous: () => void;
@@ -22,24 +21,40 @@ export const useAudioPlayer = create<AudioState>((set, get) => ({
   audio: null,
 
   initAudio: () => {
-    if (get().audio) return;
-    const audio = new Audio(SUNO_PLAYLIST[0].streamUrl);
+    if (typeof window === 'undefined' || get().audio) return;
     
-    // Auto-play next track logic
+    const audio = new Audio();
+    audio.crossOrigin = "anonymous"; // Needed for the Visualizer/Analyzer to work
+    audio.src = SUNO_PLAYLIST[0].streamUrl;
+    
     audio.onended = () => get().next();
+    
+    // Auto-retry if a Suno link glitches
+    audio.onerror = () => {
+      console.warn("Audio link failed, skipping to next...");
+      get().next();
+    };
     
     set({ audio });
   },
 
-  play: () => {
+  play: async () => {
     const { audio, initAudio } = get();
     if (!audio) {
       initAudio();
-      setTimeout(() => get().audio?.play(), 100);
-    } else {
-      audio.play();
+      // Give it a millisecond to initialize
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
-    set({ isPlaying: true });
+    
+    const currentAudio = get().audio;
+    if (currentAudio) {
+      try {
+        await currentAudio.play();
+        set({ isPlaying: true });
+      } catch (err) {
+        console.error("Playback blocked by browser. Interaction required.", err);
+      }
+    }
   },
 
   pause: () => {
@@ -52,7 +67,8 @@ export const useAudioPlayer = create<AudioState>((set, get) => ({
     const { audio } = get();
     if (audio) {
       audio.src = SUNO_PLAYLIST[nextIndex].streamUrl;
-      if (get().isPlaying) audio.play();
+      audio.load(); // Force the browser to recognize the new source
+      if (get().isPlaying) audio.play().catch(() => {});
     }
     set({ 
       currentTrackIndex: nextIndex, 
@@ -65,7 +81,8 @@ export const useAudioPlayer = create<AudioState>((set, get) => ({
     const { audio } = get();
     if (audio) {
       audio.src = SUNO_PLAYLIST[prevIndex].streamUrl;
-      if (get().isPlaying) audio.play();
+      audio.load();
+      if (get().isPlaying) audio.play().catch(() => {});
     }
     set({ 
       currentTrackIndex: prevIndex, 
